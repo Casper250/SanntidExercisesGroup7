@@ -94,7 +94,7 @@ func udp_send(message string, config ServerConfig, wg *sync.WaitGroup) {
 	}
 	defer conn.Close()
 
-	// Send 10 messages
+	// Send 10 messages with a 1 second delay
 	i := 0
 	for i < 10 {
 		data := []byte(message)
@@ -104,7 +104,7 @@ func udp_send(message string, config ServerConfig, wg *sync.WaitGroup) {
 		}
 		fmt.Println("Sent: ", message)
 
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 		i++
 	}
 

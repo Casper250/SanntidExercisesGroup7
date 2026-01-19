@@ -10,9 +10,10 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(3)
 	go tcp_send("Hello from 1", &wg)
 	go tcp_send("Hello from 2", &wg)
+	go tcp_send("Hello from 3", &wg)
 	wg.Wait()
 }
 
@@ -24,7 +25,8 @@ func tcp_send(message string, wg *sync.WaitGroup) {
 
 	// TCP socket
 	// Portnummeret kom på VsCode med den lokale severen
-	//var port_delimMessage = "33546"
+	// var port_delimMessage = "33546"
+	// address format: a.b.c.d:port
 	var port_fixedMessageSize = "34933"
 	var ip_serverSide = "172.26.161.38"
 	var address = ip_serverSide + ":" + port_fixedMessageSize
@@ -37,7 +39,7 @@ func tcp_send(message string, wg *sync.WaitGroup) {
 	}
 	defer conn.Close()
 
-	for counter < 40 {
+	for counter < 5 {
 
 		// Send a message
 		conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
