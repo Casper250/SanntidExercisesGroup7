@@ -11,8 +11,8 @@ import (
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(2)
-	go tcp_send("Hello from Eskil sin laptop", &wg)
-	go tcp_send("Hello from another tcp_send() function", &wg)
+	go tcp_send("Hello from 1", &wg)
+	go tcp_send("Hello from 2", &wg)
 	wg.Wait()
 }
 
@@ -37,7 +37,7 @@ func tcp_send(message string, wg *sync.WaitGroup) {
 	}
 	defer conn.Close()
 
-	for counter < 10 {
+	for counter < 40 {
 
 		// Send a message
 		conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
