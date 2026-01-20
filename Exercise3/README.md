@@ -95,13 +95,16 @@ Below is another such list of questions and considerations, but aimed instead at
  - The implementation
    - What is a module made of? Is a "module" a class, thread, file, function, ...?
      - This will depend on your programming language of choice.
+     > We will use go. Modules are circles and messages are channels between them.
    - These modules are part of the same software system. How will they interact?
      - Methods, functions, messages, channels, network, shared variables, file systems, ...?
 
  - Data from the outside world
    - Something needs to be sent and received on the network
      - Are the network messages different "types" with different kinds of content?
+     > We decide
      - Should the program do different things when receiving different kinds of messages?
+     > Yes?
    - You also get data from (and to) the elevator hardware
      - Should the different kinds of data feed into the same "top-level" module?
      - Or should they go directly to their own specific modules?
@@ -110,7 +113,10 @@ Below is another such list of questions and considerations, but aimed instead at
    - Briefly, and as "seen from the outside": What modules do you need?
      - As in: what are the things that need to be done?
        - Try giving them names. A concise and descriptive name can be a good indication of a high-quality module.
-     - Consider: what are the criteria you have used for deciding when to split one thing into two (or more) modules?
+       > Brainstorm: OrderDistributer, Elevator (use the provided), SlaveReporter (SlaveKeeper), 
+       
+      - Consider: what are the criteria you have used for deciding when to split one thing into two (or more) modules?
+      > A module should change its own data. 
    - For a module to perform its task, it depends on information. What are the inputs, outputs, and state of the modules?
      - Think in terms of data structures, or at least "what the data is" (even if it has no structure yet).
      - Given the language and implementation choice - are you playing to the strengths of your choice?

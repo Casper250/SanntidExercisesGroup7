@@ -140,18 +140,40 @@ This part of the exercise is not for handing in, just for thinking about. Talk t
 
 The main problem of the project is to ensure that no orders are lost. 
  - What sub-problems do you think this consists of?
+> Communication between the elevators and ensuring all elevators and modules agree on the data. 
+> Backup takes over when elevators are lost
+
+
  - What will you have to make in order to solve these problems?
+ > Master-Backup elevator solution for redundancy
+ > Network module (udp with acks) ? 
 
 Maybe try thinking about the happy case of the system:
+> We need to figure out how to distribute orders among master and backup
+> Eskil look at: Core and shell
+
  - If we push the button one place, how do we make (preferably only) one elevator start moving?
+ > Elevator that recieves a hall orders sends the order to the master
+ 
  - Once an elevator arrives, how do we inform the others that it is safe to clear that order?
+ > Wait for the door to open. Then send it to master, and master handles it.
 
 Maybe try thinking about the [worst-case](http://xkcd.com/748/) behavior of the system:
  - What if the software controlling one of the elevators suddenly crashes?
+> Master notices that it is dead.
+
  - What if it doesn't crash, but hangs?
+ > Master
+
  - What if a message between machines is lost?
+> Verify messages and that they are recieved
+
  - What if the network cable is suddenly disconnected? Then re-connected?
+ > The single elevator should work for itself and accept new cab calls only
+ > 
+
  - What if the elevator car never arrives at its destination?
+ > Need some system that notices an elevator takes too long time to finish
 
 7: Thinking about languages
 ---------------------------

@@ -91,15 +91,24 @@ Before proceeding with any project-related networking code, think about how you 
 
  - Guarantees about elevators:
    - What should happen if one of the nodes loses its network connection?
+   > If it loses network connection the elevator becomes a single elevator and accept new cab orders.
    - What should happen if one of the nodes loses power for a brief moment?
    - What should happen if some unforeseen event causes the elevator to never reach its destination, but communication remains intact?
+   > Redistribute hall orders. Maybe send the elevator back to the last floor? 
    
  - Guarantees about orders:
    - Do all your nodes need to "agree" on a call for it to be accepted? In that case, how is a faulty node handled? 
+   > Master decides. Backup needs to agree in case it has to become the new master.
+
    - How can you be sure that a remote node "agrees" on an call?
+   > Needs to make the verification code 
+
    - How do you handle losing packets between the nodes?
+   > It needs to detect that the whole packet was not recieved and request a resend
+
    - Do you share the entire state of the current calls, or just the changes as they occur?
      - For either one: What should happen when an elevator re-joins after having been offline?
+     > The new elevator becomes a backup
 
 *Pencil and paper is encouraged! Drawing a diagram/graph of the message pathways between nodes (elevators) will aid in visualizing complexity. Drawing the order of messages through time will let you more easily see what happens when communication fails.*
      
