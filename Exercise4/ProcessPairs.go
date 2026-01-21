@@ -11,6 +11,7 @@ import (
 )
 
 func counting(start int, out chan<- int) {
+	defer close(out)
 
 	counter := start
 	fmt.Println("Now this process starts to count")
@@ -40,11 +41,9 @@ func main() {
 
 	for {
 		switch masterInt {
-		//SLAVE
-		case 0:
-			// UDP recieve/ reset timer
 
-			//timer := 0
+		case 0: //SLAVE
+
 			fmt.Println("Backups start")
 
 			addrRcv := net.UDPAddr{
@@ -54,68 +53,62 @@ func main() {
 
 			connRcv, err := net.ListenUDP("udp", &addrRcv)
 			if err != nil {
-				log.Fatalln("NEIIII", err)
+				log.Println("NEIIII", err)
 			}
 
 			buf := make([]byte, 1024)
 			fmt.Println("Backups starts listening")
 			for {
 
-				connRcv.SetReadDeadline(time.Now().Add(2 * time.Second))
+				connRcv.SetReadDeadline(time.Now().Add(3 * time.Second))
 				n, _, err := connRcv.ReadFromUDP(buf)
 				if err != nil {
 					log.Println("Eg tek over skuta!")
+					// Trigger a new master and backup
 					masterInt = 1
-					connRcv.Close()
 					break
 
 				} else {
 					message := string(buf[:n])
 					messageInt, err := strconv.Atoi(message)
 					if err != nil {
-						log.Println("Cannot convert to int 7", err)
+						log.Println("Cannot convert to int", err)
 					} else {
 						counter = messageInt
 						//fmt.Println("Received: ", counter)
 					}
 				}
-
 			}
-		// MASTER
-		case 1:
+			connRcv.Close()
+
+		case 1: // MASTER
 
 			connSend, err := net.Dial("udp", "localhost:20008")
 			if err != nil {
-				log.Fatalln("Nei nei nei nei")
+				log.Println("Nei nei nei nei")
 			}
-			defer connSend.Close()
 
 			out := make(chan int)
-
 			go counting(counter, out)
 
 			// Open a backup because the backup became master
-			//fmt.Println("Master want to initialize backup")
+
 			exec.Command("gnome-terminal", "--", "go", "run", "ProcessPairs.go", "0").Run()
 
-			for {
+			for c := range out {
+				fmt.Println("Counter = ", c)
 
-				select {
-				case c := <-out:
-					fmt.Println("Counter = ", c)
+				// UDP Send a message on the PORT
+				cString := strconv.Itoa(c)
+				data := []byte(cString)
 
-					// UDP Send a message on the PORT
-					cString := strconv.Itoa(c)
-					data := []byte(cString)
-
-					_, err = connSend.Write(data)
-					if err != nil {
-						log.Fatalln("Error sending message", err)
-					}
+				_, err = connSend.Write(data)
+				if err != nil {
+					log.Println("Error sending message", err)
 				}
 			}
-
+			connSend.Close()
 		}
-	}
 
+	}
 }
