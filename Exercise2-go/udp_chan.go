@@ -145,4 +145,3 @@ func udp_sendChan(message string, config ServerConfig, out chan<- string, done <
 		}
 	}
 }
-strconv.Atoi(startValue)
