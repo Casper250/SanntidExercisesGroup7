@@ -1,0 +1,15 @@
+Se PDF som heter "CasperNyePlan" for designet. Det er en skisse med har prøvd å legge med vesentlig informasjon. Tilstandsdiagrammene og så videre er ikkt lagd så fint, 
+men håper de kan vise hva jeg mener. 
+
+Hvorfor denne ideen: 
+Poenget er at jeg ønsket lage et design hvor det i mindre grad er nødvendig å få acknowledgement fra alle. Istedenfor krever vi bare acknowledgement fra heisen som skal ta en ny ordre.
+Vi sender ut hele staten som en beskjed periodisk, slik at beskjedene blir idempotente. For å oppnå kommutativitet av meldinger, bruker vi et ordningssystem (master epoch, order number). 
+Når master har en ny beskjed oppdaterer han order number (S_num). 
+
+Master har PossibleOrderTable og ActiveOrderTable. Oppdaterer Possible Order table når en ordre bestemmes, oppdaterer active order table når det har blitt godkjent av heisen
+som skal gjøre dette. 
+
+OrderControl er litt rotete, men jeg håper igjen her det kommer fram hva jeg mener. Denne delen må nok struktureres litt bra.
+
+
+PS: Kan hende jeg har byttet om navn på samme ting litt her og der. Håper det er tydelig hva jeg mener. 
