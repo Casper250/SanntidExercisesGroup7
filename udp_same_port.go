@@ -22,6 +22,7 @@ func main() {
 	counter := 0
 	counter_str := "0"
 
+	// UDP config stuff
 	lc := net.ListenConfig{
 		Control: func(network, address string, c syscall.RawConn) error {
 			return c.Control(func(fd uintptr) {
@@ -56,8 +57,10 @@ func main() {
 		}
 	}()
 
-	// Sender logic
+	// dst is a *UDPAddr 
 	dst, _ := net.ResolveUDPAddr("udp4", broadcastAddr+":"+port)
+
+	// Write a message to udp 
 	ticker := time.NewTicker(10 * time.Millisecond)
 	for range ticker.C {
 		fmt.Printf("[SEND] broadcasting from %s...\n", senderID)
