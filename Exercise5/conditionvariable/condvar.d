@@ -52,13 +52,10 @@ class Resource(T) {
             cond.wait();    
         }
 
-
         queue.popFront();
         busy = true;
         
         auto result = value; 
-
-
 
         mtx.unlock();
         return result;
@@ -67,7 +64,6 @@ class Resource(T) {
     void deallocate(T v){
 
         mtx.lock();
-
 
         value = v;
         busy = false;

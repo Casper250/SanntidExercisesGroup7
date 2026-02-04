@@ -66,14 +66,13 @@ func resourceManager(askFor chan ResourceRequest, giveBack chan Resource) {
 			request := <-askFor
 			queue.Insert(request, request.priority)
 			continue
-
 		}
+
 		firstInQueue := queue.Front().(ResourceRequest)
 		firstInQueue.channel <- res
 		queue.PopFront()
 
 		res = <-giveBack
-		time.Sleep(0)
 	}
 
 }

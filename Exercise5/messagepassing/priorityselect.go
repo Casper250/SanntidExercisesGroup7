@@ -47,38 +47,39 @@ func resourceManager(takeLow chan Resource, takeHigh chan Resource, giveBack cha
 			continue
 		default:
 			// No high-priority user was waiting at this exact moment.
+			// Just choose one,
+			select {
+			case takeHigh <- res:
+				res = <-giveBack
+			case takeLow <- res:
+				res = <-giveBack
+			}
 		}
 
 		// 2. If High wasn't ready, wait for EITHER a return OR a Low priority user
-		select {
-		case takeHigh <- res:
-			res = <-giveBack
-		case takeLow <- res:
-			res = <-giveBack
 
-			// select {
-			// case res = <-giveBack:
-			// 	//fmt.Println("give back")
-			// default:
-			// }
+		// select {
+		// case res = <-giveBack:
+		// 	//fmt.Println("give back")
+		// default:
+		// }
 
-			// select {
-			// case takeHigh <- res:
-			// 	//fmt.Println("Take high")
-			// 	continue
-			// default:
-			// }
+		// select {
+		// case takeHigh <- res:
+		// 	//fmt.Println("Take high")
+		// 	continue
+		// default:
+		// }
 
-			// select {
-			// case takeLow <- res:
-			// 	//fmt.Println("Take low")
-			// 	continue
-			// default:
-			// }
+		// select {
+		// case takeLow <- res:
+		// 	//fmt.Println("Take low")
+		// 	continue
+		// default:
+		// }
 
-			// time.Sleep(tick)
+		// time.Sleep(tick)
 
-		}
 	}
 
 }
